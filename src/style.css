@@ -1,0 +1,35 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+.gamefield{
+    max-width: 100%;
+    visibility: hidden;   
+}
+button{ 
+    position: relative;
+    left: 40%;
+    
+}
+
+.subfield{
+        cursor: pointer;
+        min-height: 10vh;
+        height: 10vh;
+        max-height: 30vh;
+        min-width: 15vw;
+        width: 15vh;
+        max-width: 20vw;
+        border:2px solid;
+       
+    } 
+    .player{
+            background-color: rgb(50, 255, 204);
+            color:rgb(0, 0, 0)
+    }
+    .computer{
+            background-color: rgb(0, 149, 255);
+            color:rgb(0, 0, 0)
+
+    }
+    .resetGame{
+        visibility: hidden;
+    }
