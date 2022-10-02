@@ -1,11 +1,11 @@
 import { PlayerEnum } from './enum';
 import { Gamelogic } from './gamelogic';
 
-//START
+
 let gameStartButton = document.querySelector<HTMLElement>('.startGame') 
 gameStartButton!.addEventListener('click', startGame)
 
-//RESET
+
 let gameResetButton = document.querySelector<HTMLElement>('.resetGame')
 gameResetButton!.addEventListener('click', resetGame)
 
@@ -17,7 +17,7 @@ let gameBoard = document.querySelector<HTMLElement>('.gameboard')
 
 
  // !!!
- //computerFields: boolean[] = new Array(9).fill(false);
+ let computerFields: boolean[] = new Array(9).fill(false);
 
 
 
@@ -40,7 +40,7 @@ information!.textContent = ' ';
 function resetGame(){
   Gamelogic.gameStop();
 // redo the array with colors 
-// this.computerFields = new Array(9).fill(false);
+  computerFields = new Array(9).fill(false);
    gameStartButton!.style.visibility = "visible";
    gameFieldCSS!.style.visibility = "hidden";
    gameResetButton!.style.visibility = "hidden";
@@ -58,7 +58,7 @@ function resetGame(){
 
 
  async function clickSubfield(subfield: any ): Promise<void> {
-    // if(this.gameStopped) return;
+    // if(gameStopped) return;
     const information = document.querySelector(".currentStatus"); 
     const position = subfield.currentTarget.getAttribute('position');
     console.log(position)
@@ -79,7 +79,7 @@ function resetGame(){
       
       Gamelogic.changePlayer(PlayerEnum.PC);
        const positionComputer = Gamelogic.computerPlay();
-       //this.computerFields[positionComputer] = true;
+       computerFields[positionComputer] = true;
     } else {
       information!.textContent = getInvalidFieldMessage();
     }
