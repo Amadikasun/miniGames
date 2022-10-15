@@ -1,34 +1,36 @@
 import { PlayerEnum } from './enum';
 import { Gamelogic } from './gamelogic';
+import { Status } from './gamestatus';
 
+const gameStartButton = document.querySelector<HTMLElement>('.startGame');
+if (gameStartButton) {
+  gameStartButton.addEventListener('click', startGame)
+}
 
-let gameStartButton = document.querySelector<HTMLElement>('.startGame') 
-gameStartButton!.addEventListener('click', startGame)
+const gameResetButton = document.querySelector<HTMLElement>('.resetGame');
+if (gameResetButton) {
+  gameResetButton.addEventListener('click', resetGame)
+}
 
+const gameFieldCSS = document.querySelector<HTMLElement>('.gamefield');
 
-let gameResetButton = document.querySelector<HTMLElement>('.resetGame')
-gameResetButton!.addEventListener('click', resetGame)
+const information = document.querySelector(".currentStatus");
 
-let gameFieldCSS = document.querySelector<HTMLElement>('.gamefield')
+const subfields = document.querySelectorAll('.subfield')
+// !!!
+let computerFields: boolean[] = new Array(9).fill(false);
 
-let gameBoard = document.querySelector<HTMLElement>('.gameboard')
-
- let subfields = document.querySelectorAll ('.subfield')
-
-
- // !!!
- let computerFields: boolean[] = new Array(9).fill(false);
-
-
-
-
+let gameLogic: Gamelogic; 
 
 function startGame(){
-console.log('start')
-Gamelogic.gameStart()
-Gamelogic.changePlayer(PlayerEnum.Player)
-let information = document.querySelector(".currentStatus");
-information!.textContent = ' ';
+  // Initialize the business logic class
+  gameLogic = new Gamelogic();
+
+  console.log('start')
+  // Start the game!
+  gameLogic.gameStart()
+  gameLogic.changePlayer(PlayerEnum.Player)
+
 
   gameStartButton!.style.visibility = "hidden";
   gameFieldCSS!.style.visibility = "visible";
@@ -37,66 +39,80 @@ information!.textContent = ' ';
   subfields.forEach(subfield => subfield.addEventListener("click",clickSubfield))
 }
 
-function resetGame(){
-  Gamelogic.gameStop();
+function resetGame () {
+  gameLogic.gameStop();
 // redo the array with colors 
+  subfields.forEach((x) => {
+    x.classList.remove('player');
+    x.classList.remove('computer');
+  });
   computerFields = new Array(9).fill(false);
    gameStartButton!.style.visibility = "visible";
    gameFieldCSS!.style.visibility = "hidden";
    gameResetButton!.style.visibility = "hidden";
    console.log('reset')
 
-
-   const information = document.querySelector(".currentStatus");
    const currentPlayer = 'Click on the button for the start GAME!'
-   information!.textContent = currentPlayer;
-
-
    
-  }
-
-
+   notifyUser(currentPlayer);
+}
 
  async function clickSubfield(subfield: any ): Promise<void> {
-    // if(gameStopped) return;
-    const information = document.querySelector(".currentStatus"); 
+    if (gameLogic.gameStatus === Status.STOP)  return;
+
     const position = subfield.currentTarget.getAttribute('position');
-    console.log(position)
+    console.log(position, 'pos');
 
-     gameBoard = subfield.currentTarget.parentElement.parentElement;
+    // checks if the player does not want to overwrite the field
+    if (gameLogic.checkPlayer(position)){ 
 
-    if (Gamelogic.checkPlayer(position)){ // checks if the player does not want to overwrite the field
-
-      Gamelogic.setField(position, Gamelogic.currentTurn); // set this field owns player
-      const color = Gamelogic.getPlayerColor();
+      gameLogic.setField(position, gameLogic.currentTurn); // set this field owns player
+      const color = gameLogic.getPlayerColor();
       subfield.currentTarget.classList.add(color); //color background
 
-      if (await Gamelogic.checkGameEnd()){
-        information!.textContent = getEndGameMessage();
+      if (await gameLogic.checkGameEnd()){
+        notifyUser(getEndGameMessage());
           stopGame();
           return;
       }
-      
-      Gamelogic.changePlayer(PlayerEnum.PC);
-       const positionComputer = Gamelogic.computerPlay();
-       computerFields[positionComputer] = true;
+
+      await pcMove();
     } else {
-      information!.textContent = getInvalidFieldMessage();
+      notifyUser(getInvalidFieldMessage());
     }
 
-    if (await Gamelogic.checkGameEnd()) {
-      information!.textContent = getEndGameMessage();
+    if (await gameLogic.checkGameEnd()) {
+      notifyUser(getEndGameMessage());
     }
-    Gamelogic.changePlayer(PlayerEnum.Player);
+    gameLogic.changePlayer(PlayerEnum.Player);
     return ;
     
    }
 
+
+const pcMove = async (): Promise<void> => {
+  gameLogic.changePlayer(PlayerEnum.PC);
+  const positionComputer = gameLogic.computerPlay();
+  computerFields[positionComputer] = true;
+
+  const subfiled = document.querySelector(`.subfield[position="${positionComputer}"]`)
+  if (!subfiled) return;
+  subfiled.classList.add(gameLogic.getPlayerColor());
+};
+
+const notifyUser = (message: string): boolean => {
+  if (!message || !information) return false;
+
+  information.textContent = message;
+  return true;
+};
   
 
-function  getEndGameMessage(): string {
-    if (!Gamelogic.wonLostLogic()) return 'Nobody won, Nobody lost!?';
-    return Gamelogic.currentTurn === PlayerEnum.Player ? 'Winner is Player' : 'Winner is Computer';
+function getEndGameMessage(): string {
+  const t = gameLogic.wonLostLogic();
+  console.log(t, 'tt????');
+    if (!t) return 'Nobody won, Nobody lost!?';
+    return gameLogic.currentTurn === PlayerEnum.Player ? 'Winner is Player' : 'Winner is Computer';
   }
 
  function getInvalidFieldMessage() {
@@ -110,6 +126,6 @@ function  getEndGameMessage(): string {
   }
 
  function stopGame(){
-    Gamelogic.gameStart();
+    gameLogic.gameStop();
   }
 
