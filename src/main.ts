@@ -32,7 +32,7 @@ function startGame(){
   gameLogic.changePlayer(PlayerEnum.Player)
 
 
-  gameStartButton!.style.visibility = "hidden";
+  gameStartButton!.style.display = "none";
   gameFieldCSS!.style.visibility = "visible";
   gameResetButton!.style.visibility = "visible";
 
@@ -47,7 +47,7 @@ function resetGame () {
     x.classList.remove('computer');
   });
   computerFields = new Array(9).fill(false);
-   gameStartButton!.style.visibility = "visible";
+   gameStartButton!.style.display = "block";
    gameFieldCSS!.style.visibility = "hidden";
    gameResetButton!.style.visibility = "hidden";
    console.log('reset')

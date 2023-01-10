@@ -1,50 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Game: Vite + TS</title>
-    <link rel="stylesheet" href="/src/style.css">
-  </head>
-  <body>
-    <div id="app d-flex justify-content-center">
-      <h1 class="text-center"> Tic Tac Toe</h1>
 
-      <div class="field d-flex justify-content-center">
-          <p class="currentStatus ">Click on the button for the start GAME!</p>  
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game: Vite + TS</title>
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+
+<body>
+  <div id="app d-flex justify-content-center">
+    <h1 class="text-center"> Tic Tac Toe</h1>
+
+    <div class="field w-100 d-flex justify-content-center">
+      <p class="currentStatus ">Click on the button for the start GAME!</p>
+    </div>
+    <div class="w-100 d-flex justify-content-around ">
+      <button class=" startGame p-1 btn btn-dark ">Start Game Now</button>
+    </div>
+    <div class="gameboard m-0 w-100 d-flex row  p-1">
+
+
+      <div id="gameBoardInputs" class="gamefield container-fluid w-100">
+
+        <div class="row justify-content-center w-100">
+          <div position="0" class="subfield col-4"></div>
+          <div position="1" class="subfield col-4"></div>
+          <div position="2" class="subfield col-4"></div>
+        </div>
+
+        <div class="row justify-content-center w-100">
+          <div position="3" class="subfield col-4"></div>
+          <div position="4" class="subfield col-4"></div>
+          <div position="5" class="subfield col-4"></div>
+        </div>
+
+        <div class="row justify-content-center w-100">
+          <div position="6" class="subfield col-4"></div>
+          <div position="7" class="subfield col-4"></div>
+          <div position="8" class="subfield col-4"></div>
+        </div>
       </div>
-      
-      <button class=" startGame p-1">Start Game Now</button>
-      
-      <div class="gameboard d-flex row justify-content-between p-1">
-     
-     
-          <div id="gameBoardInputs" class="gamefield container-fluid ">
-                  
-                  <div class="row justify-content-center">
-                      <div  position="0" class="subfield col-4"></div>
-                      <div  position="1" class="subfield col-4"></div>
-                      <div  position="2" class="subfield col-4"></div>
-                  </div>
 
-                  <div class="row justify-content-center">
-                      <div  position="3" class="subfield col-4"></div>
-                      <div  position="4" class="subfield col-4"></div>
-                      <div  position="5" class="subfield col-4"></div>
-                  </div>
+    </div>
+    <div class="w-100 d-flex justify-content-around ">
+      <button class=" resetGame p-1 d-flex btn btn-dark ">Restart/Exit
+        Game!</button>
+    </div>
 
-                  <div class="row justify-content-center">
-                      <div  position="6" class="subfield col-4"></div>
-                      <div  position="7" class="subfield col-4"></div>
-                      <div  position="8" class="subfield col-4"></div>
-                  </div>
-              </div>
-          
-  </div>
 
-  <button class="resetGame p-1">Restart/Exit Game!</button>
+
     <script type="module" src="/src/main.ts">
     </script>
-  </body>
+</body>
+
 </html>
